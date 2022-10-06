@@ -859,16 +859,12 @@ init nacos config finished, please start seata-server
 
 ## 3.1  github地址
 
-springboot-dubbo-seata：[https://github.com/lidong1665/spring-cloud-learning-example/tree/master/springboot-dubbo-seata-nacos](https://github.com/lidong1665/spring-cloud-learning-example/tree/master/springboot-dubbo-seata-nacos)
+gmall-distributed-transaction：[https://github.com/haibozhang2016/gmall-distributed-transaction]
 
 - gmall-common ：公共模块
-
 - gmall-account ：用户账号模块
-
 - gmall-order ：订单模块
-
 - gmall-stock ：库存模块
-
 - gmall-business ：业务模块
 
 #### 3.2 账户服务：AccountDubboService
@@ -1147,7 +1143,7 @@ SET FOREIGN_KEY_CHECKS=1;
 
 这里为了简化我将这个三张表创建到一个库中,使用是三个数据源来实现。
 
-## 3.8 我们以账号服务`samples-account`为例 ，分析需要注意的配置项目
+## 3.8 以账号服务`gmall-account`为例 ，分析需要注意的配置项目
 
 ### 3.8.1 引入的依赖
 
@@ -1624,7 +1620,7 @@ t_stock
 
 ### 5.2 测试回滚
 
-我们`samples-business`将`BusinessServiceImpl`的`handleBusiness2` 下面的代码去掉注释
+我们`gmall-business`将`BusinessServiceImpl`的`handleBusiness2` 下面的代码去掉注释
 
 ```
 if (!flag) {
