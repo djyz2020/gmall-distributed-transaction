@@ -1,0 +1,38 @@
+package gmall.distributed.transaction.account.service;
+
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import gmall.distributed.transaction.account.entity.Account;
+import gmall.distributed.transaction.account.mapper.AccountMapper;
+import gmall.distributed.transaction.common.dto.AccountDTO;
+import gmall.distributed.transaction.common.enums.RspStatusEnum;
+import gmall.distributed.transaction.common.response.ObjectResponse;
+import io.seata.spring.annotation.GlobalLock;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
+
+    @Override
+    public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
+        int account = baseMapper.decreaseAccount(accountDTO.getUserId(), accountDTO.getAmount().doubleValue());
+        ObjectResponse<Object> response = new ObjectResponse<>();
+        if (account > 0) {
+            response.setStatus(RspStatusEnum.SUCCESS.getCode());
+            response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+            return response;
+        }
+
+        response.setStatus(RspStatusEnum.FAIL.getCode());
+        response.setMessage(RspStatusEnum.FAIL.getMessage());
+        return response;
+    }
+
+    @Override
+    @GlobalLock
+    @Transactional(rollbackFor = {Throwable.class})
+    public void testGlobalLock() {
+        baseMapper.testGlobalLock("1");
+        System.out.println("Hi, i got lock, i will do some thing with holding this lock.");
+    }
+}
