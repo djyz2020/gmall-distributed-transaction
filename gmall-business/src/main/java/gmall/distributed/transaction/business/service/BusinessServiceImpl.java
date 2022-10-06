@@ -11,10 +11,12 @@ import gmall.distributed.transaction.common.dubbo.StockDubboService;
 import gmall.distributed.transaction.common.enums.RspStatusEnum;
 import gmall.distributed.transaction.common.exception.DefaultException;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class BusinessServiceImpl implements BusinessService {
 
     @DubboReference(version = "2.0.0")
@@ -23,18 +25,16 @@ public class BusinessServiceImpl implements BusinessService {
     @DubboReference(version = "2.0.0")
     private OrderDubboService orderDubboService;
 
-    private boolean flag;
-
     /**
      * 处理业务逻辑
      *
-     * @Param:
-     * @Return:
+     * @param businessDTO 业务信息
+     * @return ObjectResponse
      */
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-gts-seata-example")
+    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-gts-seata")
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
-        System.out.println("开始全局事务，XID = " + RootContext.getXID());
+        log.info("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
         //1、扣减库存
         CommodityDTO commodityDTO = new CommodityDTO();
@@ -50,6 +50,7 @@ public class BusinessServiceImpl implements BusinessService {
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
 
         //打开注释测试事务发生异常后，全局回滚功能
+        //        boolean flag;
         //        if (!flag) {
         //            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
         //        }

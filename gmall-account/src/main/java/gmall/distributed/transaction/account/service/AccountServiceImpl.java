@@ -7,10 +7,12 @@ import gmall.distributed.transaction.common.dto.AccountDTO;
 import gmall.distributed.transaction.common.enums.RspStatusEnum;
 import gmall.distributed.transaction.common.response.ObjectResponse;
 import io.seata.spring.annotation.GlobalLock;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
 
     @Override
@@ -33,6 +35,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     @Transactional(rollbackFor = {Throwable.class})
     public void testGlobalLock() {
         baseMapper.testGlobalLock("1");
-        System.out.println("Hi, i got lock, i will do some thing with holding this lock.");
+        log.info("Hi, i got lock, i will do some thing with holding this lock.");
     }
 }

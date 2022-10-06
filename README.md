@@ -571,7 +571,7 @@ docker run -itd \
 
 ## 1.简介
 
-> 本文主要介绍SpringBoot2.7.4 + Dubbo 3.1.1 + Mybatis 3.4.6 + Nacos 2021.1 + Seata 1.5.2整合来实现Dubbo分布式事务管理，使用Nacos作为Dubbo和Seata的注册中心和配置中心，使用MySQL数据库和MyBatis来操作数据。
+> 本文主要介绍SpringBoot2.6.11 + Dubbo 3.1.1 + Mybatis 3.4.6 + Nacos 2.0.4 + Seata 1.5.2整合来实现Dubbo分布式事务管理，使用Nacos作为Dubbo和Seata的注册中心和配置中心，使用MySQL数据库和MyBatis来操作数据。
 
 如果你还对`SpringBoot`、`Dubbo`、`Nacos`、`Seata`、` Mybatis` 不是很了解的话，这里我为大家整理个它们的官网网站，如下
 
@@ -1176,17 +1176,13 @@ SET FOREIGN_KEY_CHECKS=1;
     </modules>
 
     <properties>
-        <springboot.verison>2.7.4</springboot.verison>
-        <java.version>1.8</java.version>
-        <druid.version>1.1.10</druid.version>
-        <mybatis.version>1.3.2</mybatis.version>
-        <mybatis-plus.version>2.3</mybatis-plus.version>
-        <dubbo.version>3.1.1</dubbo.version>
-        <dubbo-boot.version>0.2.1.RELEASE</dubbo-boot.version>
-        <dubbo-registry-nacos.version>2.7.7</dubbo-registry-nacos.version>
-        <nacos.version>2021.1</nacos.version>
-        <seata.version>1.5.2</seata.version>
-        <netty.version>4.1.32.Final</netty.version>
+          <java.version>1.8</java.version>
+          <druid.version>1.1.10</druid.version>
+          <mybatis.version>1.3.2</mybatis.version>
+          <mybatis-plus.version>2.3</mybatis-plus.version>
+          <dubbo.version>2.7.14</dubbo.version>
+          <cloud.alibaba.version>2021.0.4.0</cloud.alibaba.version>
+          <seata.version>1.5.2</seata.version>
     </properties>
 
     <dependencies>
@@ -1517,13 +1513,6 @@ public class SeataDataSourceAutoConfig {
 ### 3.8.4 AccountExampleApplication 启动类的配置
 
 ```java
-package io.seata.samples.integration.account;
-
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
 
 @SpringBootApplication(scanBasePackages = "gmall.distributed.transaction.account")
 @MapperScan({"gmall.distributed.transaction.account.mapper"})
