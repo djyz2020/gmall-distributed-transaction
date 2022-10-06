@@ -591,7 +591,7 @@ docker run -itd \
 
 ## 2.1 下载nacos并安装启动
 
-nacos下载：[https://github.com/alibaba/nacos/releases/tag/1.1.3](https://github.com/alibaba/nacos/releases/tag/1.1.3)
+nacos下载：[https://github.com/alibaba/nacos/releases/tag/1.5.2](https://github.com/alibaba/nacos/releases/tag/1.5.2)
 
 Nacos 快速入门：[https://nacos.io/en-us/docs/quick-start.html](https://nacos.io/en-us/docs/quick-start.html)
 
@@ -734,7 +734,7 @@ client.support.spring.datasource.autoproxy=true
 - store.db.db-type=mysql : 存储数据库的类型为`mysql`
 - store.db.url=jdbc:mysql://192.168.126.137:3306/seata?useUnicode=true : 修改为自己的数据库`url`、`port`、`数据库名称`
 - store.db.user=root :数据库的账号
-- store.db.password=123456@@ :数据库的密码
+- store.db.password=123456 :数据库的密码
 - service.vgroup_mapping.order-service-seata-service-group=default
 - service.vgroup_mapping.account-service-seata-service-group=default
 - service.vgroup_mapping.stock-service-seata-service-group=default
@@ -862,7 +862,7 @@ init nacos config finished, please start seata-server
 gmall-distributed-transaction：[https://github.com/haibozhang2016/gmall-distributed-transaction]
 
 - gmall-common ：公共模块
-- gmall-account ：用户账号模块
+- gmall-account ：账户模块
 - gmall-order ：订单模块
 - gmall-stock ：库存模块
 - gmall-business ：业务模块
@@ -1143,7 +1143,7 @@ SET FOREIGN_KEY_CHECKS=1;
 
 这里为了简化我将这个三张表创建到一个库中,使用是三个数据源来实现。
 
-## 3.8 以账号服务`gmall-account`为例 ，分析需要注意的配置项目
+## 3.8 以账号服务`gmall-account`为例 ，分析需要注意的项目配置
 
 ### 3.8.1 引入的依赖
 
