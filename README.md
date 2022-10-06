@@ -571,7 +571,7 @@ docker run -itd \
 
 ## 1.简介
 
-> 本文主要介绍SpringBoot2.2.2 + Dubbo 2.7.5 + Mybatis 3.4.2 + Nacos 1.1.3 +Seata 1.0.0整合来实现Dubbo分布式事务管理，使用Nacos 作为 Dubbo和Seata的注册中心和配置中心,使用 MySQL 数据库和 MyBatis来操作数据。
+> 本文主要介绍SpringBoot2.7.4 + Dubbo 3.1.1 + Mybatis 3.4.6 + Nacos 2021.1 + Seata 1.5.2整合来实现Dubbo分布式事务管理，使用Nacos作为Dubbo和Seata的注册中心和配置中心，使用MySQL数据库和MyBatis来操作数据。
 
 如果你还对`SpringBoot`、`Dubbo`、`Nacos`、`Seata`、` Mybatis` 不是很了解的话，这里我为大家整理个它们的官网网站，如下
 
@@ -656,7 +656,7 @@ config {
 - namespace = "" ：nacos的命名空间默认为``
 - cluster = "default"  ：集群设置未默认 `default`
 
-**注意： seata0.9.0之后，配置如下, 其中`namespace = ""`**
+**注意： seata0.9.0之后，配置如下，其中`namespace = ""`**
 
 #### 2.2.3 修改 conf/nacos-config.txt配置
 
@@ -729,7 +729,7 @@ client.support.spring.datasource.autoproxy=true
 这里主要修改了如下几项：
 
 - store.mode :存储模式 默认file 这里我修改为db 模式 ，并且需要三个表`global_table`、`branch_table`和`lock_table`
-- store.db.driver-class-name： 0.8.0版本默认没有，会报错。添加了 `com.mysql.jdbc.Driver`
+- store.db.driver-class-name： 0.8.0版本默认没有，会报错。添加了 `com.mysql.cj.jdbc.Driver`
 - store.db.datasource=dbcp ：数据源 dbcp
 - store.db.db-type=mysql : 存储数据库的类型为`mysql`
 - store.db.url=jdbc:mysql://192.168.126.137:3306/seata?useUnicode=true : 修改为自己的数据库`url`、`port`、`数据库名称`
@@ -825,7 +825,7 @@ sh nacos-config.sh localhost
 init nacos config finished, please start seata-server
 ```
 
-在 Nacos 管理页面应该可以看到有 62 个 Group 为SEATA_GROUP的配置
+在 Nacos 管理页面应该可以看到有多个 Group 为 SEATA_GROUP 的配置
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2019090510533734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9saWRvbmcxNjY1LmJsb2cuY3Nkbi5uZXQ=,size_16,color_FFFFFF,t_70)
 
@@ -843,7 +843,7 @@ init nacos config finished, please start seata-server
 
 ## 3 使用seata-spring-boot-starter案例分析
 
-`seata-spring-boot-starter`是使用springboot自动装配来简化seata-all的复杂配置。1.0.0可用于替换seata-all，`GlobalTransactionScanner`
+`seata-spring-boot-starter`是使用springboot自动装配来简化seata-all的复杂配置。1.5.2可用于替换seata-all，`GlobalTransactionScanner`
 自动初始化（依赖SpringUtils）若其他途径实现`GlobalTransactionScanner`初始化，请保证`io.seata.spring.boot.autoconfigure.util.SpringUtils`先初始化；
 `seata-spring-boot-starter`默认开启数据源自动代理，用户若再手动配置`DataSourceProxy`将会导致异常。
 
@@ -924,7 +924,7 @@ public interface BusinessService {
 
 ```java
 @Service
-public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> implements ITOrderService {
+public class OrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> implements IOrderService {
 
     @Reference(version = "1.0.0")
     private AccountDubboService accountDubboService;
@@ -1176,16 +1176,16 @@ SET FOREIGN_KEY_CHECKS=1;
     </modules>
 
     <properties>
-        <springboot.verison>2.2.2.RELEASE</springboot.verison>
+        <springboot.verison>2.7.4</springboot.verison>
         <java.version>1.8</java.version>
         <druid.version>1.1.10</druid.version>
         <mybatis.version>1.3.2</mybatis.version>
         <mybatis-plus.version>2.3</mybatis-plus.version>
-        <nacos.version>0.2.3</nacos.version>
-        <lombok.version>1.16.22</lombok.version>
-        <dubbo.version>2.7.5</dubbo.version>
-        <nacos-client.verison>1.1.3</nacos-client.verison>
-        <seata.version>x.x.x</seata.version>
+        <dubbo.version>3.1.1</dubbo.version>
+        <dubbo-boot.version>0.2.1.RELEASE</dubbo-boot.version>
+        <dubbo-registry-nacos.version>2.7.7</dubbo-registry-nacos.version>
+        <nacos.version>2021.1</nacos.version>
+        <seata.version>1.5.2</seata.version>
         <netty.version>4.1.32.Final</netty.version>
     </properties>
 
@@ -1262,7 +1262,6 @@ SET FOREIGN_KEY_CHECKS=1;
             <version>${seata.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
@@ -1274,12 +1273,12 @@ SET FOREIGN_KEY_CHECKS=1;
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>${springboot.verison}</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>io.netty</groupId>
@@ -1331,7 +1330,6 @@ SET FOREIGN_KEY_CHECKS=1;
 </project>
 
 ```
-
 注意：
 - `seata-spring-boot-starter`: 这个是spring-boot seata 所需的主要依赖，1.0.0版本开始加入支持。
 - `dubbo-spring-boot-starter`:   springboot dubbo的依赖
@@ -1346,7 +1344,7 @@ server:
 # datasource config
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.126.137:3306/seata?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
     username: root
     password: 123456
@@ -1452,7 +1450,6 @@ seata:
 package io.seata.samples.integration.account.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1461,14 +1458,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
 import javax.sql.DataSource;
 
-/**
- * @Author: lidong
- * @Description  seata global configuration
- * @Date Created in 2019/9/05 10:28
- */
 @Configuration
 public class SeataDataSourceAutoConfig {
 
@@ -1553,7 +1544,7 @@ public class AccountApplication {
 - `@DubboComponentScan` 扫描 classpaths 下类中添加了 `@Service` 和 `@Reference` 将自动注入到spring beans中。
 - @EnableDubboConfig 扫描的dubbo的外部化配置。
 
-## 4 启动所有的sample模块
+## 4 启动所有的gmall模块
 
 启动 `gmall-account`、`gmall-order`、`gmall-stock`、`gmall-business`
 
