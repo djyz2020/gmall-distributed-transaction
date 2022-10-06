@@ -11,10 +11,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @MapperScan({"gmall.distributed.transaction.order.mapper"})
 @EnableDubbo(scanBasePackages = "gmall.distributed.transaction.order")
-public class OrderExampleApplication {
+public class OrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderExampleApplication.class, args);
+        SpringApplication.run(OrderApplication.class, args);
     }
 
 }

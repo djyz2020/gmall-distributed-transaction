@@ -18,20 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
-
     @Autowired
     private IAccountService accountService;
 
     @PostMapping("/dec_account")
     ObjectResponse decreaseAccount(@RequestBody AccountDTO accountDTO) {
-        LOGGER.info("请求账户微服务：{}", accountDTO.toString());
+        log.info("请求账户微服务：{}", accountDTO.toString());
         return accountService.decreaseAccount(accountDTO);
     }
 
     @GetMapping("/test_global_lock")
     void testGlobalLock() {
-        LOGGER.info("testGlobalLock");
+        log.info("testGlobalLock");
         accountService.testGlobalLock();
     }
 }

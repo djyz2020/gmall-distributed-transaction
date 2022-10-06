@@ -11,10 +11,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @MapperScan({"gmall.distributed.transaction.stock.mapper"})
 @EnableDubbo(scanBasePackages = "gmall.distributed.transaction.stock")
-public class StockExampleApplication {
+public class StockApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StockExampleApplication.class, args);
+        SpringApplication.run(StockApplication.class, args);
     }
 
 }
