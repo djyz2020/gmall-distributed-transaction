@@ -11,15 +11,16 @@ import gmall.distributed.transaction.common.dubbo.StockDubboService;
 import gmall.distributed.transaction.common.enums.RspStatusEnum;
 import gmall.distributed.transaction.common.exception.DefaultException;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BusinessServiceImpl implements BusinessService {
 
-    @Reference(version = "1.0.0")
+    @DubboReference(version = "2.0.0")
     private StockDubboService stockDubboService;
 
-    @Reference(version = "1.0.0")
+    @DubboReference(version = "2.0.0")
     private OrderDubboService orderDubboService;
 
     private boolean flag;

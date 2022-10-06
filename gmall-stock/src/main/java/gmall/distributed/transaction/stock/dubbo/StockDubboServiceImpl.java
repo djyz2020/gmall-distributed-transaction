@@ -8,10 +8,10 @@ import gmall.distributed.transaction.common.dto.CommodityDTO;
 import gmall.distributed.transaction.common.dubbo.StockDubboService;
 import gmall.distributed.transaction.stock.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Service(version = "1.0.0", protocol = "${dubbo.protocol.id}", application = "${dubbo.application.id}",
-    registry = "${dubbo.registry.id}", timeout = 3000)
+@DubboService(version = "2.0.0", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
 @Slf4j
 public class StockDubboServiceImpl implements StockDubboService {
 

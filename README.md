@@ -577,7 +577,7 @@ docker run -itd \
 
 - SpringBoot：[https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
 
-- Dubbo：[http://dubbo.apache.org/en-us/](http://dubbo.apache.org/en-us/)
+- Dubbo：[https://dubbo.apache.org/zh/index.html](https://dubbo.apache.org/zh/index.html)
 
 - Nacos：[https://nacos.io/zh-cn/docs/quick-start.html](https://nacos.io/zh-cn/docs/quick-start.html)
 
@@ -924,9 +924,9 @@ public interface BusinessService {
 
 ```java
 @Service
-public class OrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> implements IOrderService {
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
-    @Reference(version = "1.0.0")
+    @DubboReference(version = "2.0.0")
     private AccountDubboService accountDubboService;
 
     /**
@@ -978,10 +978,10 @@ public class OrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> implemen
 @Slf4j
 public class BusinessServiceImpl implements BusinessService{
 
-    @Reference(version = "1.0.0")
+    @DubboReference(version = "2.0.0")
     private StockDubboService stockDubboService;
 
-    @Reference(version = "1.0.0")
+    @DubboReference(version = "2.0.0")
     private OrderDubboService orderDubboService;
 
     private boolean flag;
@@ -1372,7 +1372,7 @@ dubbo:
 # mybatis-plus config
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml
-  typeAliasesPackage: io.seata.samples.integration.*.entity
+  typeAliasesPackage: gmall.distributed.transaction.*.entity
   configuration:
     map-underscore-to-camel-case: true
   global-config:
@@ -1382,7 +1382,7 @@ mybatis-plus:
 # Seata Config
 seata:
   enabled: true
-  application-id: account-seata-example
+  application-id: account-seata
   tx-service-group: account-service-seata-service-group # 事务群组（可以每个应用独立取名，也可以使用相同的名字）
   client:
     rm-report-success-enable: true
@@ -1757,3 +1757,7 @@ java.lang.RuntimeException: 测试抛异常后，分布式事务回滚！
 我们查看数据库数据，已经回滚，和上面的数据一致。
 
 到这里一个简单的案例基本就分析结束。感谢你的学习。
+
+### 三、项目启动
+#### 1.编译项目
+mvn clean package -DskipTests=true
