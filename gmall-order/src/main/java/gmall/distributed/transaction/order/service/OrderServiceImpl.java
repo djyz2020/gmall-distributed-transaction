@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private AccountDubboService accountDubboService;
 
     /**

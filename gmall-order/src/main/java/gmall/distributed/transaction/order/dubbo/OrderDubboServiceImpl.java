@@ -10,7 +10,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-@DubboService(version = "2.0.0", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
+@DubboService(protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
 public class OrderDubboServiceImpl implements OrderDubboService {
 
     @Autowired

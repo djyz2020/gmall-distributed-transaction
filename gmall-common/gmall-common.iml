@@ -21,6 +21,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.6.11" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.6.11" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.11" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.11" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.6.11" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.11" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.11" level="project" />
@@ -62,9 +64,6 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-relational:2.3.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.22" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.6.11" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.11" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: mysql:mysql-connector-java:8.0.30" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.24" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:2.6.11" level="project" />
@@ -152,6 +151,10 @@
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-spring-boot-autoconfigure-compatible:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-registry-nacos:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-registry-api:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-cluster:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-rpc-api:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-serialization-api:3.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-remoting-api:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-container-api:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-metadata-api:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.dubbo:dubbo-common:3.1.1" level="project" />
@@ -179,13 +182,8 @@
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-context:3.1.4" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2021.0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba.cloud:spring-cloud-starter-alibaba-seata:2021.0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-aop:2.6.11" level="project" />
-    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.9.7" level="project" />
-    <orderEntry type="library" name="Maven: io.seata:seata-spring-boot-starter:1.5.2" level="project" />
-    <orderEntry type="library" name="Maven: io.seata:seata-spring-autoconfigure-client:1.5.2" level="project" />
-    <orderEntry type="library" name="Maven: io.seata:seata-spring-autoconfigure-core:1.5.2" level="project" />
-    <orderEntry type="library" name="Maven: io.seata:seata-all:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: io.seata:seata-spring-boot-starter:1.4.2" level="project" />
+    <orderEntry type="library" name="Maven: io.seata:seata-all:1.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:antlr4:4.8" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:antlr4-runtime:4.8" level="project" />
     <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.5.2" level="project" />
@@ -197,12 +195,16 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-pool2:2.11.1" level="project" />
     <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.7.1" level="project" />
     <orderEntry type="library" name="Maven: cglib:cglib:3.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:4.2" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:27.0.1-jre" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:failureaccess:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:2.5.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.17" level="project" />
     <orderEntry type="library" name="Maven: com.github.ben-manes.caffeine:caffeine:2.9.3" level="project" />

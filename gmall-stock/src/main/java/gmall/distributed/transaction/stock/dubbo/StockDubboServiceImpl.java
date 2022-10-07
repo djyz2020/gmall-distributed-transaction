@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@DubboService(version = "2.0.0", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
+@DubboService(protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
 @Slf4j
 public class StockDubboServiceImpl implements StockDubboService {
 

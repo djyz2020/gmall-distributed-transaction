@@ -27,6 +27,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         response.setStatus(RspStatusEnum.FAIL.getCode());
         response.setMessage(RspStatusEnum.FAIL.getMessage());
+
+//        boolean flag = true;
+//        if (flag) {
+//            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
+//        }
+
         return response;
     }
 

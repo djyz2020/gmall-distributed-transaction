@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BusinessServiceImpl implements BusinessService {
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private StockDubboService stockDubboService;
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private OrderDubboService orderDubboService;
 
     /**
@@ -48,12 +48,6 @@ public class BusinessServiceImpl implements BusinessService {
         orderDTO.setOrderCount(businessDTO.getCount());
         orderDTO.setOrderAmount(businessDTO.getAmount());
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
-
-        //打开注释测试事务发生异常后，全局回滚功能
-//        boolean flag = false;
-//        if (!flag) {
-//            throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-//        }
 
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);

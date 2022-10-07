@@ -976,7 +976,7 @@ public interface BusinessService {
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private AccountDubboService accountDubboService;
 
     /**
@@ -1028,10 +1028,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 @Slf4j
 public class BusinessServiceImpl implements BusinessService{
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private StockDubboService stockDubboService;
 
-    @DubboReference(version = "2.0.0")
+    @DubboReference
     private OrderDubboService orderDubboService;
 
     private boolean flag;
