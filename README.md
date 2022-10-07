@@ -621,7 +621,7 @@ docker run -itd \
 
 ## 1.简介
 
-> 本文主要介绍SpringBoot2.6.11 + Dubbo 3.1.1 + Mybatis 3.4.6 + Nacos 2.0.4 + Seata 1.4.2整合来实现Dubbo分布式事务管理，使用Nacos作为Dubbo和Seata的注册中心和配置中心，使用MySQL数据库和MyBatis来操作数据。
+> 本文主要介绍SpringBoot2.6.11 + Dubbo 3.1.1 + Mybatis 3.4.6 + Nacos 2.0.4 + Seata 1.5.2整合来实现Dubbo分布式事务管理，使用Nacos作为Dubbo和Seata的注册中心和配置中心，使用MySQL数据库和MyBatis来操作数据。
 
 如果你还对`SpringBoot`、`Dubbo`、`Nacos`、`Seata`、` Mybatis` 不是很了解的话，这里我为大家整理个它们的官网网站，如下
 
@@ -1230,7 +1230,7 @@ SET FOREIGN_KEY_CHECKS=1;
         <mybatis-plus.version>2.3</mybatis-plus.version>
         <dubbo.version>3.1.1</dubbo.version>
         <cloud.alibaba.version>2021.0.4.0</cloud.alibaba.version>
-        <seata.version>1.4.2</seata.version>
+        <seata.version>1.5.2</seata.version>
     </properties>
 
     <dependencies>
@@ -1648,10 +1648,10 @@ java.lang.RuntimeException: 测试抛异常后，分布式事务回滚！
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793) ~[spring-aop-5.3.22.jar:5.3.22]
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.22.jar:5.3.22]
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763) ~[spring-aop-5.3.22.jar:5.3.22]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor$2.execute(GlobalTransactionalInterceptor.java:184) ~[seata-all-1.4.2.jar:1.4.2]
-	at io.seata.tm.api.TransactionalTemplate.execute(TransactionalTemplate.java:127) ~[seata-all-1.4.2.jar:1.4.2]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor.handleGlobalTransaction(GlobalTransactionalInterceptor.java:181) ~[seata-all-1.4.2.jar:1.4.2]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor.invoke(GlobalTransactionalInterceptor.java:150) ~[seata-all-1.4.2.jar:1.4.2]
+	at io.seata.spring.annotation.GlobalTransactionalInterceptor$2.execute(GlobalTransactionalInterceptor.java:184) ~[seata-all-1.5.2.jar:1.5.2]
+	at io.seata.tm.api.TransactionalTemplate.execute(TransactionalTemplate.java:127) ~[seata-all-1.5.2.jar:1.5.2]
+	at io.seata.spring.annotation.GlobalTransactionalInterceptor.handleGlobalTransaction(GlobalTransactionalInterceptor.java:181) ~[seata-all-1.5.2.jar:1.5.2]
+	at io.seata.spring.annotation.GlobalTransactionalInterceptor.invoke(GlobalTransactionalInterceptor.java:150) ~[seata-all-1.5.2.jar:1.5.2]
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.22.jar:5.3.22]
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763) ~[spring-aop-5.3.22.jar:5.3.22]
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708) ~[spring-aop-5.3.22.jar:5.3.22]

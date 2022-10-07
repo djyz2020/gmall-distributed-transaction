@@ -30,7 +30,7 @@
         <mybatis-plus.version>2.3</mybatis-plus.version>
         <dubbo.version>3.1.1</dubbo.version>
         <cloud.alibaba.version>2021.0.4.0</cloud.alibaba.version>
-        <seata.version>1.4.2</seata.version>
+        <seata.version>1.5.2</seata.version>
     </properties>
 
     <dependencies>
@@ -165,6 +165,17 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+            <version>${cloud.alibaba.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.seata</groupId>
+                    <artifactId>seata-spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>io.seata</groupId>
             <artifactId>seata-spring-boot-starter</artifactId>
