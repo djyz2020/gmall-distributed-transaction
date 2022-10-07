@@ -349,7 +349,7 @@ ALTER TABLE his_config_info ADD COLUMN `encrypted_data_key` text NOT NULL COMMEN
 ### 4. seata组件docker高可用部署
 4.1 mysql数据库初始化，创建seata数据库，并执行以下脚本：
 ```
-# the table to store GlobalSession data
+-- the table to store GlobalSession data
 CREATE TABLE IF NOT EXISTS `global_table`
 (
     `xid`                       VARCHAR(128) NOT NULL,
@@ -364,12 +364,12 @@ CREATE TABLE IF NOT EXISTS `global_table`
     `gmt_create`                DATETIME,
     `gmt_modified`              DATETIME,
     PRIMARY KEY (`xid`),
-    KEY `idx_gmt_modified_status` (`gmt_modified`, `status`),
+    KEY `idx_status_gmt_modified` (`status` , `gmt_modified`),
     KEY `idx_transaction_id` (`transaction_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4;
 
-# the table to store BranchSession data
+-- the table to store BranchSession data
 CREATE TABLE IF NOT EXISTS `branch_table`
 (
     `branch_id`         BIGINT       NOT NULL,
@@ -386,24 +386,41 @@ CREATE TABLE IF NOT EXISTS `branch_table`
     PRIMARY KEY (`branch_id`),
     KEY `idx_xid` (`xid`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4;
 
-# the table to store lock data
+-- the table to store lock data
 CREATE TABLE IF NOT EXISTS `lock_table`
 (
     `row_key`        VARCHAR(128) NOT NULL,
-    `xid`            VARCHAR(96),
+    `xid`            VARCHAR(128),
     `transaction_id` BIGINT,
     `branch_id`      BIGINT       NOT NULL,
     `resource_id`    VARCHAR(256),
     `table_name`     VARCHAR(32),
     `pk`             VARCHAR(36),
+    `status`         TINYINT      NOT NULL DEFAULT '0' COMMENT '0:locked ,1:rollbacking',
     `gmt_create`     DATETIME,
     `gmt_modified`   DATETIME,
     PRIMARY KEY (`row_key`),
-    KEY `idx_branch_id` (`branch_id`)
+    KEY `idx_status` (`status`),
+    KEY `idx_branch_id` (`branch_id`),
+    KEY `idx_xid` (`xid`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `distributed_lock`
+(
+    `lock_key`       CHAR(20) NOT NULL,
+    `lock_value`     VARCHAR(20) NOT NULL,
+    `expire`         BIGINT,
+    primary key (`lock_key`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('AsyncCommitting', ' ', 0);
+INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryCommitting', ' ', 0);
+INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('RetryRollbacking', ' ', 0);
+INSERT INTO `distributed_lock` (lock_key, lock_value, expire) VALUES ('TxTimeoutCheck', ' ', 0);
 ```  
 4.2 注册中心和配置中心使用nacos
 ```
@@ -475,6 +492,7 @@ c) 修改完后用挂载的方式启动seata
 docker run -itd \
 --name seata-1 \
 --restart=always \
+--ip=172.19.0.6 \
 -p 8091:8091 \
 -p 7091:7091 \
 -e SEATA_IP=192.168.126.137 \
@@ -486,6 +504,7 @@ seataio/seata-server:1.5.2
 docker run -itd \
 --name seata-2 \
 --restart=always \
+--ip=172.19.0.7 \
 -p 8092:8091 \
 -p 7092:7091 \
 -e SEATA_IP=192.168.126.137 \
@@ -497,6 +516,7 @@ seataio/seata-server:1.5.2
 docker run -itd \
 --name seata-3 \
 --restart=always \
+--ip=172.19.0.8 \
 -p 8093:8091 \
 -p 7093:7091 \
 -e SEATA_IP=192.168.126.137 \
