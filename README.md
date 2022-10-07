@@ -479,6 +479,7 @@ docker run -itd \
 -p 7091:7091 \
 -e SEATA_IP=192.168.126.137 \
 -e SEATA_PORT=8091 \
+-e SERVER_NODE=1 \
 -v /opt/seata/application.yml:/seata-server/resources/application.yml  \
 seataio/seata-server:1.5.2
 
@@ -489,6 +490,7 @@ docker run -itd \
 -p 7092:7091 \
 -e SEATA_IP=192.168.126.137 \
 -e SEATA_PORT=8092 \
+-e SERVER_NODE=2 \
 -v /opt/seata/application.yml:/seata-server/resources/application.yml  \
 seataio/seata-server:1.5.2
 
@@ -499,6 +501,7 @@ docker run -itd \
 -p 7093:7091 \
 -e SEATA_IP=192.168.126.137 \
 -e SEATA_PORT=8093 \
+-e SERVER_NODE=3 \
 -v /opt/seata/application.yml:/seata-server/resources/application.yml  \
 seataio/seata-server:1.5.2
 ```
@@ -1790,7 +1793,7 @@ stream {
     upstream nacos-9848 {
         server 192.168.126.137:9848;
         server 192.168.126.137:9858;
-	    server 192.168.126.137:9868;
+        server 192.168.126.137:9868;
     }
     upstream nacos-9849 {
         server 192.168.126.137:9849;
@@ -1821,6 +1824,13 @@ nginx -s reload  
 b) Nacos高可用部署新增开发端口
 ```
 -p 8848:8848 -p 9848:9848 
+```
+### 2. Seata高可用Docker集群部署，连接有问题
+
+问题：只有8091节点可以正常连接，其它连接异常
+```
+添加 SERVER_NODE 用于指定seata-server节点ID
+-e SERVER_NODE=XX \
 ```
 
 ## 四、spring-cloud-alibaba

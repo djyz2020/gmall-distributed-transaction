@@ -5,10 +5,11 @@ import io.seata.core.context.RootContext;
 import gmall.distributed.transaction.account.service.IAccountService;
 import gmall.distributed.transaction.common.dto.AccountDTO;
 import gmall.distributed.transaction.common.dubbo.AccountDubboService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@DubboService(version = "2.0.0", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
 public class AccountDubboServiceImpl implements AccountDubboService {
 
     @Autowired
