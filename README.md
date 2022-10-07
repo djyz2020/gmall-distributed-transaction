@@ -231,6 +231,8 @@ docker run -itd \
 -p 8848:8848 \
 --network nacos-network \
 --name nacos-8848 \
+-p 9848:9848 \
+-p 9849:9849 \
 --ip=172.19.0.2 \
 --restart=always \
 nacos/nacos-server
@@ -247,6 +249,8 @@ docker run -itd \
 -e MYSQL_SERVICE_USER=root \
 -e MYSQL_SERVICE_PASSWORD=123456 \
 -p 8849:8848 \
+-p 9858:9848 \
+-p 9859:9849 \
 --network nacos-network \
 --name nacos-8849 \
 --ip=172.19.0.3 \
@@ -265,6 +269,8 @@ docker run -itd \
 -e MYSQL_SERVICE_USER=root \
 -e MYSQL_SERVICE_PASSWORD=123456 \
 -p 8850:8848 \
+-p 9868:9848 \
+-p 9869:9849 \
 --network nacos-network \
 --name nacos-8850 \
 --ip=172.19.0.4 \
@@ -507,6 +513,26 @@ pid        /var/run/nginx.pid;
 events {
     worker_connections  1024;
 }
+stream {
+    upstream nacos-9848 {
+        server 192.168.126.137:9848;
+        server 192.168.126.137:9858;
+	    server 192.168.126.137:9868;
+    }
+    upstream nacos-9849 {
+        server 192.168.126.137:9849;
+        server 192.168.126.137:9859;
+        server 192.168.126.137:9869;
+    }
+    server {
+        listen 9848;
+        proxy_pass nacos-9848;
+    }
+    server {
+        listen 9849;
+        proxy_pass nacos-9849;
+    }
+}
 http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
@@ -517,6 +543,7 @@ http {
 
     access_log /var/log/nginx/access.log  main;
     sendfile on;
+    tcp_nopush on;
     keepalive_timeout 65;
     gzip  on;
     include /etc/nginx/conf.d/*.conf;
@@ -1747,6 +1774,54 @@ java.lang.RuntimeException: 测试抛异常后，分布式事务回滚！
 
 到这里一个简单的案例基本就分析结束。感谢你的学习。
 
-### 三、项目启动
-#### 1.编译项目
-mvn clean package -DskipTests=true
+## 三、项目开发过程问题
+### 1. 因为使用的Nacos2.x导致连接Nacos有问题
+
+#### 1.1 问题原因
+
+官网回答：https://nacos.io/zh-cn/docs/2.0.0-compatibility.html
+Nacos2.0版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成。
+使用VIP/nginx请求时，需要配置成TCP转发，不能配置http2转发，否则连接会被nginx断开，因此nginx需要新增两个TCP端口：9848和9849
+
+#### 1.2 解决方法
+a) 在顶级配置文件(/etc/nginx/nginx.conf)中添加如下配置块:
+```
+stream {
+    upstream nacos-9848 {
+        server 192.168.126.137:9848;
+        server 192.168.126.137:9858;
+	    server 192.168.126.137:9868;
+    }
+    upstream nacos-9849 {
+        server 192.168.126.137:9849;
+        server 192.168.126.137:9859;
+        server 192.168.126.137:9869;
+    }
+    server {
+        listen 9848;
+        proxy_pass nacos-9848;
+    }
+    server {
+        listen 9849;
+        proxy_pass nacos-9849;
+    }
+}
+```
+实现监听和转发9848、9849端口.
+```
+# 检查配置文件
+nginx -t  
+# 重新加载配置
+nginx -s reload  
+```
+<p>
+    注：TCP请求配置参考<a href="https://www.cnblogs.com/airoot/p/14958783.html">Nginx配置TCP请求转发</a>
+</p>
+
+b) Nacos高可用部署新增开发端口
+```
+-p 8848:8848 -p 9848:9848 
+```
+
+## 四、spring-cloud-alibaba
+<a href="毕业版本依赖关系(推荐使用)">毕业版本依赖关系(推荐使用)</a>
