@@ -5,6 +5,7 @@ import gmall.distributed.transaction.account.entity.Account;
 import gmall.distributed.transaction.account.mapper.AccountMapper;
 import gmall.distributed.transaction.common.dto.AccountDTO;
 import gmall.distributed.transaction.common.enums.RspStatusEnum;
+import gmall.distributed.transaction.common.exception.DefaultException;
 import gmall.distributed.transaction.common.response.ObjectResponse;
 import io.seata.spring.annotation.GlobalLock;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
 
     @Override
+    @Transactional(rollbackFor = DefaultException.class)
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         log.info("扣减账户开始...");
         boolean flag = true;

@@ -5,6 +5,7 @@ import gmall.distributed.transaction.common.dto.AccountDTO;
 import gmall.distributed.transaction.common.dto.OrderDTO;
 import gmall.distributed.transaction.common.dubbo.AccountDubboService;
 import gmall.distributed.transaction.common.enums.RspStatusEnum;
+import gmall.distributed.transaction.common.exception.DefaultException;
 import gmall.distributed.transaction.common.response.ObjectResponse;
 import gmall.distributed.transaction.order.entity.Order;
 import gmall.distributed.transaction.order.mapper.OrderMapper;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private AccountDubboService accountDubboService;
 
     /**
@@ -30,6 +31,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @Return: OrderDTO  订单对象
      */
     @Override
+    @Transactional(rollbackFor = DefaultException.class)
     public ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
         //扣减用户账户

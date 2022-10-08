@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class BusinessServiceImpl implements BusinessService {
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private StockDubboService stockDubboService;
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private OrderDubboService orderDubboService;
 
     /**
@@ -34,6 +34,7 @@ public class BusinessServiceImpl implements BusinessService {
      */
     @Override
     @GlobalTransactional(name = "dubbo-gts-seata", rollbackFor = Exception.class, timeoutMills = 300000)
+    @Transactional(rollbackFor = DefaultException.class)
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         log.info("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();

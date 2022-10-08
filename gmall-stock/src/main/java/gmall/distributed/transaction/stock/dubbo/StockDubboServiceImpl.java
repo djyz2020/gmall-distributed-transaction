@@ -1,17 +1,15 @@
 package gmall.distributed.transaction.stock.dubbo;
 
-import com.alibaba.dubbo.config.annotation.Service;
-
-import gmall.distributed.transaction.common.response.ObjectResponse;
-import io.seata.core.context.RootContext;
 import gmall.distributed.transaction.common.dto.CommodityDTO;
 import gmall.distributed.transaction.common.dubbo.StockDubboService;
+import gmall.distributed.transaction.common.response.ObjectResponse;
 import gmall.distributed.transaction.stock.service.IStockService;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@DubboService(protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
+@DubboService(version = "2.0.0", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}", timeout = 3000)
 @Slf4j
 public class StockDubboServiceImpl implements StockDubboService {
 

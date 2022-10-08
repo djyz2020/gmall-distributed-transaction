@@ -1189,7 +1189,7 @@ public interface BusinessService {
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements IOrderService {
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private AccountDubboService accountDubboService;
 
     /**
@@ -1241,10 +1241,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 @Slf4j
 public class BusinessServiceImpl implements BusinessService{
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private StockDubboService stockDubboService;
 
-    @DubboReference
+    @DubboReference(version="2.0.0")
     private OrderDubboService orderDubboService;
 
     private boolean flag;
