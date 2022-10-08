@@ -49,9 +49,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setAmount(orderDTO.getOrderAmount().doubleValue());
         try {
             baseMapper.createOrder(order);
-            log.info("创建订单成功！");
         } catch (Exception e) {
-            log.info("创建订单失败！");
             response.setStatus(RspStatusEnum.FAIL.getCode());
             response.setMessage(RspStatusEnum.FAIL.getMessage());
             return response;
@@ -60,11 +58,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if (objectResponse.getStatus() != 200) {
             response.setStatus(RspStatusEnum.FAIL.getCode());
             response.setMessage(RspStatusEnum.FAIL.getMessage());
+            log.info("创建订单失败！");
             return response;
         }
 
         response.setStatus(RspStatusEnum.SUCCESS.getCode());
         response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+        log.info("创建订单成功！");
         return response;
     }
 }

@@ -27,12 +27,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         if (account > 0) {
             response.setStatus(RspStatusEnum.SUCCESS.getCode());
             response.setMessage(RspStatusEnum.SUCCESS.getMessage());
+            log.info("扣减账户成功！");
             return response;
         }
 
         response.setStatus(RspStatusEnum.FAIL.getCode());
         response.setMessage(RspStatusEnum.FAIL.getMessage());
-        log.info("扣减账户成功！");
+        log.info("扣减账户失败！");
         return response;
     }
 
