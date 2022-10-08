@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @Return: OrderDTO  订单对象
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
         //扣减用户账户

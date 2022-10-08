@@ -14,6 +14,7 @@ import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -32,6 +33,7 @@ public class BusinessServiceImpl implements BusinessService {
      * @return ObjectResponse
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @GlobalTransactional(name = "dubbo-gts-seata", rollbackFor = Exception.class, timeoutMills = 300000)
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         log.info("开始全局事务，XID = " + RootContext.getXID());

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         log.info("扣减账户开始...");
         boolean flag = true;
