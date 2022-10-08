@@ -17,6 +17,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     @Override
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
+        log.info("扣减账户开始...");
         boolean flag = true;
         if (flag) {
             throw new RuntimeException("测试抛异常后，分布式事务回滚！");
@@ -31,6 +32,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
         response.setStatus(RspStatusEnum.FAIL.getCode());
         response.setMessage(RspStatusEnum.FAIL.getMessage());
+        log.info("扣减账户成功！");
         return response;
     }
 

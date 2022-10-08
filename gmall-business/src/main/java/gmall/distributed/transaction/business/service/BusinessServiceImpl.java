@@ -32,27 +32,29 @@ public class BusinessServiceImpl implements BusinessService {
      * @return ObjectResponse
      */
     @Override
-    @GlobalTransactional(timeoutMills = 300000, name = "dubbo-gts-seata")
+    @GlobalTransactional(name = "dubbo-gts-seata", rollbackFor = Exception.class, timeoutMills = 300000)
     public ObjectResponse handleBusiness(BusinessDTO businessDTO) {
         log.info("开始全局事务，XID = " + RootContext.getXID());
         ObjectResponse<Object> objectResponse = new ObjectResponse<>();
         //1、扣减库存
+        log.info("扣减库存开始...");
         CommodityDTO commodityDTO = new CommodityDTO();
         commodityDTO.setCommodityCode(businessDTO.getCommodityCode());
         commodityDTO.setCount(businessDTO.getCount());
         ObjectResponse stockResponse = stockDubboService.decreaseStock(commodityDTO);
+        log.info("扣减库存结束!");
         //2、创建订单
+        log.info("创建订单开始...");
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setUserId(businessDTO.getUserId());
         orderDTO.setCommodityCode(businessDTO.getCommodityCode());
         orderDTO.setOrderCount(businessDTO.getCount());
         orderDTO.setOrderAmount(businessDTO.getAmount());
         ObjectResponse<OrderDTO> response = orderDubboService.createOrder(orderDTO);
-
+        log.info("创建订单结束！");
         if (stockResponse.getStatus() != 200 || response.getStatus() != 200) {
             throw new DefaultException(RspStatusEnum.FAIL);
         }
-
         objectResponse.setStatus(RspStatusEnum.SUCCESS.getCode());
         objectResponse.setMessage(RspStatusEnum.SUCCESS.getMessage());
         objectResponse.setData(response.getData());
