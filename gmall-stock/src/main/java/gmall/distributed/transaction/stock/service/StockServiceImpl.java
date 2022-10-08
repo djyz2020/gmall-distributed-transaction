@@ -9,14 +9,12 @@ import gmall.distributed.transaction.stock.entity.Stock;
 import gmall.distributed.transaction.stock.mapper.StockMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements IStockService {
 
     @Override
-    @Transactional(rollbackFor = DefaultException.class)
     public ObjectResponse decreaseStock(CommodityDTO commodityDTO) {
         log.info("扣减库存开始，扣减库存：{}", commodityDTO.getCount());
         int stock = baseMapper.decreaseStock(commodityDTO.getCommodityCode(), commodityDTO.getCount());
