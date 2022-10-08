@@ -30,7 +30,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      * @Return: OrderDTO  订单对象
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public ObjectResponse<OrderDTO> createOrder(OrderDTO orderDTO) {
         ObjectResponse<OrderDTO> response = new ObjectResponse<>();
         //扣减用户账户

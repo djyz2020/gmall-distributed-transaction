@@ -9,14 +9,12 @@ import gmall.distributed.transaction.common.response.ObjectResponse;
 import io.seata.spring.annotation.GlobalLock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public ObjectResponse decreaseAccount(AccountDTO accountDTO) {
         log.info("扣减账户开始...");
         boolean flag = true;

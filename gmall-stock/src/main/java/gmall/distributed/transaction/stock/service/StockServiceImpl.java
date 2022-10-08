@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements IStockService {
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public ObjectResponse decreaseStock(CommodityDTO commodityDTO) {
         log.info("扣减库存开始，扣减库存：{}", commodityDTO.getCount());
         int stock = baseMapper.decreaseStock(commodityDTO.getCommodityCode(), commodityDTO.getCount());
