@@ -5,8 +5,10 @@ import com.alibaba.druid.pool.DruidDataSource;
 import io.seata.rm.datasource.DataSourceProxy;
 import io.seata.spring.annotation.GlobalTransactionScanner;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
@@ -58,7 +60,7 @@ public class SeataAutoConfig {
      * init datasource proxy
      *
      * @Param: druidDataSource  datasource bean instance
-     * @Return: DataSourceProxy  datasource proxy
+     * @Return: DataSource  datasource
      */
     @Bean
     public DataSource dataSourceProxy(DruidDataSource druidDataSource) {
@@ -69,7 +71,7 @@ public class SeataAutoConfig {
      * init mybatis sqlSessionFactory
      *
      * @Param: dataSourceProxy  datasource proxy
-     * @Return: DataSourceProxy  datasource proxy
+     * @Return: SqlSessionFactory  sql session factory
      */
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
@@ -77,7 +79,7 @@ public class SeataAutoConfig {
         factoryBean.setDataSource(dataSource);
         factoryBean.setMapperLocations(
             new PathMatchingResourcePatternResolver().getResources("classpath*:/mapper/*.xml"));
-        factoryBean.setTransactionFactory(new JdbcTransactionFactory());
+        // factoryBean.setTransactionFactory(new JdbcTransactionFactory()); // 默认启用SpringManangedTransactionFactory
         return factoryBean.getObject();
     }
 
