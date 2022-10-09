@@ -37,8 +37,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     @Override
     @GlobalLock
     @Transactional(rollbackFor = {Throwable.class})
-    public void testGlobalLock() {
+    public String testGlobalLock() {
         baseMapper.testGlobalLock("1");
         log.info("Hi, i got lock, i will do some thing with holding this lock.");
+        return "Get the local lock success.";
     }
 }

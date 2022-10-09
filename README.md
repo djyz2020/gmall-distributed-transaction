@@ -1769,7 +1769,7 @@ public class AccountApplication {
 
 ## 5 测试
 
-### 5. 1 发送一个下单请求
+### 5.1 发送一个下单请求
 
 使用postman 发送 ：[http://localhost:8104/business/dubbo/buy](http://localhost:8104/business/dubbo/buy)
 
@@ -1795,7 +1795,7 @@ public class AccountApplication {
 }
 ```
 
-这时候控制台：
+#### 5.2.1 business服务控制台日志
 
 ```
 2022-10-07 15:15:11.776  INFO 12928 --- [eoutChecker_1_1] i.s.core.rpc.netty.NettyPoolableFactory  : register success, cost 33 ms, version:1.5.2,role:TMROLE,channel:[id: 0x982eb788, L:/192.168.126.1:51635 - R:/192.168.126.137:8091]
@@ -1807,166 +1807,43 @@ public class AccountApplication {
 2022-10-07 15:29:09.021  INFO 12928 --- [nio-8104-exec-2] i.seata.tm.api.DefaultGlobalTransaction  : [192.168.126.137:8091:9321294899093505] commit status: Committed```
 
 事务提交成功，
-
-我们来看一下数据库数据变化
-
-t_account
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190905122211274.png)
-t_order
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190905122302472.png)
-t_stock
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190905122326182.png)
-数据没有问题。
-
-### 5.2 测试回滚
-
-我们`gmall-business`将`BusinessServiceImpl`的`handleBusiness2` 下面的代码去掉注释
-
-```
-if (!flag) {
-  throw new RuntimeException("测试抛异常后，分布式事务回滚！");
-}
-```
-
-使用postman 发送 ：[http://localhost:8104/business/dubbo/buy2](http://localhost:8104/business/dubbo/buy2)
-
-.响应结果：
-
-```json
-{
-    "timestamp": "2019-09-05T04:29:34.178+0000",
-    "status": 500,
-    "error": "Internal Server Error",
-    "message": "测试抛异常后，分布式事务回滚！",
-    "path": "/business/dubbo/buy"
-}
-```
-
-#### 5.2.1 business控制台日志
-
-```
-2022-10-07 15:45:31.371  INFO 14576 --- [nio-8104-exec-4] g.d.t.b.controller.BusinessController    : 请求参数：BusinessDTO(userId=1, commodityCode=C201901140001, name=fan, count=50, amount=100)
-2022-10-07 15:45:31.376  INFO 14576 --- [nio-8104-exec-4] i.seata.tm.api.DefaultGlobalTransaction  : Begin new global transaction [192.168.126.137:8091:9321294899093508]
-2022-10-07 15:45:31.376  INFO 14576 --- [nio-8104-exec-4] g.d.t.b.service.BusinessServiceImpl      : 开始全局事务，XID = 192.168.126.137:8091:9321294899093508
-2022-10-07 15:45:35.094  INFO 14576 --- [nio-8104-exec-4] i.seata.tm.api.DefaultGlobalTransaction  : Suspending current transaction, xid = 192.168.126.137:8091:9321294899093508
-2022-10-07 15:45:35.094  INFO 14576 --- [nio-8104-exec-4] i.seata.tm.api.DefaultGlobalTransaction  : [192.168.126.137:8091:9321294899093508] rollback status: Rollbacked
-2022-10-07 15:45:35.095 ERROR 14576 --- [nio-8104-exec-4] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.RuntimeException: 测试抛异常后，分布式事务回滚！] with root cause
-
-java.lang.RuntimeException: 测试抛异常后，分布式事务回滚！
-	at gmall.distributed.transaction.business.service.BusinessServiceImpl.handleBusiness(BusinessServiceImpl.java:55) ~[classes/:na]
-	at gmall.distributed.transaction.business.service.BusinessServiceImpl$$FastClassBySpringCGLIB$$2efa4f9c.invoke(<generated>) ~[classes/:na]
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.22.jar:5.3.22]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793) ~[spring-aop-5.3.22.jar:5.3.22]
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.22.jar:5.3.22]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763) ~[spring-aop-5.3.22.jar:5.3.22]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor$2.execute(GlobalTransactionalInterceptor.java:184) ~[seata-all-1.5.2.jar:1.5.2]
-	at io.seata.tm.api.TransactionalTemplate.execute(TransactionalTemplate.java:127) ~[seata-all-1.5.2.jar:1.5.2]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor.handleGlobalTransaction(GlobalTransactionalInterceptor.java:181) ~[seata-all-1.5.2.jar:1.5.2]
-	at io.seata.spring.annotation.GlobalTransactionalInterceptor.invoke(GlobalTransactionalInterceptor.java:150) ~[seata-all-1.5.2.jar:1.5.2]
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.22.jar:5.3.22]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763) ~[spring-aop-5.3.22.jar:5.3.22]
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708) ~[spring-aop-5.3.22.jar:5.3.22]
-	at gmall.distributed.transaction.business.service.BusinessServiceImpl$$EnhancerBySpringCGLIB$$8611641e.handleBusiness(<generated>) ~[classes/:na]
-	at gmall.distributed.transaction.business.controller.BusinessController.handleBusiness(BusinessController.java:30) ~[classes/:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_77]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_77]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_77]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_77]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1070) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681) ~[tomcat-embed-core-9.0.65.jar:4.0.FR]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) ~[spring-webmvc-5.3.22.jar:5.3.22]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764) ~[tomcat-embed-core-9.0.65.jar:4.0.FR]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:96) ~[spring-boot-actuator-2.6.11.jar:2.6.11]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) ~[spring-web-5.3.22.jar:5.3.22]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197) ~[tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:890) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1789) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.65.jar:9.0.65]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_77]
 ```
 
 #### 5.2.2 account服务控制台日志
 
 ```bash
-2020-01-08 11:05:35.523  INFO 23416 --- [:20883-thread-8] i.s.s.i.a.dubbo.AccountDubboServiceImpl  : 全局事务id ：192.168.10.103:8091:2032180177
-2020-01-08 11:05:35.793  INFO 23416 --- [:20883-thread-8] i.s.common.loader.EnhancedServiceLoader  : load LoadBalance[null] extension by class[io.seata.discovery.loadbalance.RandomLoadBalance]
-2020-01-08 11:05:35.908  WARN 23416 --- [:20883-thread-8] i.s.common.loader.EnhancedServiceLoader  : load [io.seata.rm.datasource.undo.parser.ProtostuffUndoLogParser] class fail. io/protostuff/runtime/RuntimeEnv
-2020-01-08 11:05:35.909  INFO 23416 --- [:20883-thread-8] i.s.common.loader.EnhancedServiceLoader  : load UndoLogParser[jackson] extension by class[io.seata.rm.datasource.undo.parser.JacksonUndoLogParser]
-2020-01-08 11:05:37.281  INFO 23416 --- [atch_RMROLE_1_8] i.s.core.rpc.netty.RmMessageListener     : onMessage:xid=192.168.10.103:8091:2032180177,branchId=2032180189,branchType=AT,resourceId=jdbc:mysql://127.0.0.1:3306/seata,applicationData=null
-2020-01-08 11:05:37.283  INFO 23416 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacking: 192.168.10.103:8091:2032180177 2032180189 jdbc:mysql://127.0.0.1:3306/seata
-2020-01-08 11:05:37.477  INFO 23416 --- [atch_RMROLE_1_8] i.s.r.d.undo.AbstractUndoLogManager      : xid 192.168.10.103:8091:2032180177 branch 2032180189, undo_log deleted with GlobalFinished
-2020-01-08 11:05:37.478  INFO 23416 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacked result: PhaseTwo_Rollbacked
+2022-10-09 23:20:44.923  INFO 16768 --- [-20880-thread-3] g.d.t.a.dubbo.AccountDubboServiceImpl    : 全局事务id ：192.168.126.137:8091:9322130166932525
+2022-10-09 23:20:44.923  INFO 16768 --- [-20880-thread-3] g.d.t.a.service.AccountServiceImpl       : 扣减账户开始...
+2022-10-09 23:20:45.009  INFO 16768 --- [-20880-thread-3] g.d.t.a.service.AccountServiceImpl       : 扣减账户成功！
+2022-10-09 23:21:04.890  INFO 16768 --- [h_RMROLE_1_2_16] i.s.c.r.p.c.RmBranchCommitProcessor      : rm client handle branch commit process:xid=192.168.126.137:8091:9322130166932525,branchId=9322130166932529,branchType=AT,resourceId=jdbc:mysql://192.168.126.137:3310/account,applicationData=null
+2022-10-09 23:21:06.272  INFO 16768 --- [h_RMROLE_1_2_16] io.seata.rm.AbstractRMHandler            : Branch committing: 192.168.126.137:8091:9322130166932525 9322130166932529 jdbc:mysql://192.168.126.137:3310/account null
+2022-10-09 23:21:06.274  INFO 16768 --- [h_RMROLE_1_2_16] io.seata.rm.AbstractRMHandler            : Branch commit result: PhaseTwo_Committed
 ```
 
-#### 5.2.3 order服务控制台日志
+#### 5.2.3 stock服务控制台日志
 
 ```bash
-2020-01-08 11:05:35.492  INFO 17296 --- [:20880-thread-2] i.s.s.i.o.dubbo.OrderDubboServiceImpl    : 全局事务id ：192.168.10.103:8091:2032180177
-2020-01-08 11:05:36.470  INFO 17296 --- [:20880-thread-2] i.s.common.loader.EnhancedServiceLoader  : load LoadBalance[null] extension by class[io.seata.discovery.loadbalance.RandomLoadBalance]
-2020-01-08 11:05:36.648  WARN 17296 --- [:20880-thread-2] i.s.common.loader.EnhancedServiceLoader  : load [io.seata.rm.datasource.undo.parser.ProtostuffUndoLogParser] class fail. io/protostuff/runtime/RuntimeEnv
-2020-01-08 11:05:36.650  INFO 17296 --- [:20880-thread-2] i.s.common.loader.EnhancedServiceLoader  : load UndoLogParser[jackson] extension by class[io.seata.rm.datasource.undo.parser.JacksonUndoLogParser]
-2020-01-08 11:05:36.895  INFO 17296 --- [atch_RMROLE_1_8] i.s.core.rpc.netty.RmMessageListener     : onMessage:xid=192.168.10.103:8091:2032180177,branchId=2032180192,branchType=AT,resourceId=jdbc:mysql://127.0.0.1:3306/seata,applicationData=null
-2020-01-08 11:05:36.897  INFO 17296 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacking: 192.168.10.103:8091:2032180177 2032180192 jdbc:mysql://127.0.0.1:3306/seata
-2020-01-08 11:05:37.152  INFO 17296 --- [atch_RMROLE_1_8] i.s.r.d.undo.AbstractUndoLogManager      : xid 192.168.10.103:8091:2032180177 branch 2032180192, undo_log deleted with GlobalFinished
-2020-01-08 11:05:37.153  INFO 17296 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacked result: PhaseTwo_Rollbacked
+2022-10-09 23:20:44.879  INFO 3668 --- [-20882-thread-4] g.d.t.stock.dubbo.StockDubboServiceImpl  : 全局事务id ：192.168.126.137:8091:9322130166932525
+2022-10-09 23:20:44.879  INFO 3668 --- [-20882-thread-4] g.d.t.stock.service.StockServiceImpl     : 扣减库存开始，扣减库存：50
+2022-10-09 23:20:44.914  INFO 3668 --- [-20882-thread-4] g.d.t.stock.service.StockServiceImpl     : 扣减库存成功！
+2022-10-09 23:20:57.409  INFO 3668 --- [h_RMROLE_1_2_16] i.s.c.r.p.c.RmBranchCommitProcessor      : rm client handle branch commit process:xid=192.168.126.137:8091:9322130166932525,branchId=9322130166932527,branchType=AT,resourceId=jdbc:mysql://192.168.126.137:3310/stock,applicationData=null
+2022-10-09 23:21:04.877  INFO 3668 --- [h_RMROLE_1_2_16] io.seata.rm.AbstractRMHandler            : Branch committing: 192.168.126.137:8091:9322130166932525 9322130166932527 jdbc:mysql://192.168.126.137:3310/stock null
+2022-10-09 23:21:04.878  INFO 3668 --- [h_RMROLE_1_2_16] io.seata.rm.AbstractRMHandler            : Branch commit result: PhaseTwo_Committed
+
 ```
 
 #### 5.2.4 order服务控制台日志
 
 ```bash
-2020-01-08 11:05:31.478  INFO 24100 --- [:20888-thread-2] i.s.common.loader.EnhancedServiceLoader  : load ContextCore[null] extension by class[io.seata.core.context.ThreadLocalContextCore]
-2020-01-08 11:05:31.478  INFO 24100 --- [:20888-thread-2] i.s.s.i.s.dubbo.StockDubboServiceImpl  : 全局事务id ：192.168.10.103:8091:2032180177
-2020-01-08 11:05:32.097  INFO 24100 --- [:20888-thread-2] i.s.common.loader.EnhancedServiceLoader  : load LoadBalance[null] extension by class[io.seata.discovery.loadbalance.RandomLoadBalance]
-2020-01-08 11:05:33.130  WARN 24100 --- [:20888-thread-2] i.s.common.loader.EnhancedServiceLoader  : load [io.seata.rm.datasource.undo.parser.ProtostuffUndoLogParser] class fail. io/protostuff/runtime/RuntimeEnv
-2020-01-08 11:05:33.131  INFO 24100 --- [:20888-thread-2] i.s.common.loader.EnhancedServiceLoader  : load UndoLogParser[jackson] extension by class[io.seata.rm.datasource.undo.parser.JacksonUndoLogParser]
-2020-01-08 11:05:37.549  INFO 24100 --- [atch_RMROLE_1_8] i.s.core.rpc.netty.RmMessageListener     : onMessage:xid=192.168.10.103:8091:2032180177,branchId=2032180182,branchType=AT,resourceId=jdbc:mysql://127.0.0.1:3306/seata,applicationData=null
-2020-01-08 11:05:37.551  INFO 24100 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacking: 192.168.10.103:8091:2032180177 2032180182 jdbc:mysql://127.0.0.1:3306/seata
-2020-01-08 11:05:37.692  INFO 24100 --- [atch_RMROLE_1_8] i.s.r.d.undo.AbstractUndoLogManager      : xid 192.168.10.103:8091:2032180177 branch 2032180182, undo_log deleted with GlobalFinished
-2020-01-08 11:05:37.693  INFO 24100 --- [atch_RMROLE_1_8] io.seata.rm.AbstractRMHandler            : Branch Rollbacked result: PhaseTwo_Rollbacked
+2022-10-09 23:20:44.919  INFO 13388 --- [-20881-thread-2] g.d.t.order.dubbo.OrderDubboServiceImpl  : 全局事务id ：192.168.126.137:8091:9322130166932525
+2022-10-09 23:20:44.920  INFO 13388 --- [-20881-thread-2] g.d.t.order.service.OrderServiceImpl     : 扣减账户开始...
+2022-10-09 23:20:45.011  INFO 13388 --- [-20881-thread-2] g.d.t.order.service.OrderServiceImpl     : 扣减账户成功！
+2022-10-09 23:20:45.011  INFO 13388 --- [-20881-thread-2] g.d.t.order.service.OrderServiceImpl     : 创建订单开始...
+2022-10-09 23:20:45.080  INFO 13388 --- [-20881-thread-2] g.d.t.order.service.OrderServiceImpl     : 创建订单成功！
+2022-10-09 23:21:06.283  INFO 13388 --- [h_RMROLE_1_3_16] i.s.c.r.p.c.RmBranchCommitProcessor      : rm client handle branch commit process:xid=192.168.126.137:8091:9322130166932525,branchId=9322130166932531,branchType=AT,resourceId=jdbc:mysql://192.168.126.137:3310/order,applicationData=null
+2022-10-09 23:21:07.631  INFO 13388 --- [h_RMROLE_1_3_16] io.seata.rm.AbstractRMHandler            : Branch committing: 192.168.126.137:8091:9322130166932525 9322130166932531 jdbc:mysql://192.168.126.137:3310/order null
+2022-10-09 23:21:07.631  INFO 13388 --- [h_RMROLE_1_3_16] io.seata.rm.AbstractRMHandler            : Branch commit result: PhaseTwo_Committed
 ```
-
-我们查看数据库数据，已经回滚，和上面的数据一致。
 
 到这里一个简单的案例基本就分析结束。感谢你的学习。
 

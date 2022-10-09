@@ -12,5 +12,5 @@ public interface IAccountService extends IService<Account> {
      */
     ObjectResponse decreaseAccount(AccountDTO accountDTO);
 
-    void testGlobalLock();
+    String testGlobalLock();
 }
