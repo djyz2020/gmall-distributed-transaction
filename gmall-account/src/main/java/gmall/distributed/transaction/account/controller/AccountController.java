@@ -28,9 +28,9 @@ public class AccountController {
     }
 
     @GetMapping("/test_global_lock")
-    void testGlobalLock() {
+    Object testGlobalLock() {
         log.info("testGlobalLock");
-        accountService.testGlobalLock();
+        return accountService.testGlobalLock();
     }
 }
 
